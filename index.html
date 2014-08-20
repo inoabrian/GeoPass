@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html ng-app="application" class="ng-scope"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}.ng-hide-add-active,.ng-hide-remove{display:block!important;}</style>
+			<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		
+			<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+			
+			<style>
+				html body{
+					margin:0;
+					background : #3498db;
+				}
+				.navbar{
+					border:none !important;
+				}
+
+				.form-signin {
+				  max-width: 330px;
+				  padding: 15px;
+				}
+				.form-signin .form-signin-heading,
+				.form-signin .checkbox {
+					margin-bottom: 10%;
+				}
+				.form-signin .checkbox {
+				  font-weight: normal;
+				}
+				.form-signin .form-control {
+				  position: relative;
+				  height: auto;
+				  -webkit-box-sizing: border-box;
+					 -moz-box-sizing: border-box;
+						  box-sizing: border-box;
+				  padding: 10px;
+				  font-size: 16px;
+				}
+				.form-signin .form-control:focus {
+				  z-index: 2;
+				}
+				.form-signin input[type="email"] {
+					width: 100%;
+					margin: 0;
+					padding: 5px 10px;
+					background: 0;
+					background-image: initial;
+					background-position-x: 0px;
+					background-position-y: 50%;
+					background-size: initial;
+					background-repeat-x: initial;
+					background-repeat-y: initial;
+					background-attachment: initial;
+					background-origin: initial;
+					background-clip: initial;
+					background-color: initial;
+					border: 0;
+					border-bottom: 1px solid #FFFFFF;
+					outline: 0;
+					font-style: italic;
+					font-size: 12px;
+					font-weight: 400;
+					letter-spacing: 1px;
+					margin-bottom: 5px;
+					color: #FFFFFF;
+					outline: 0;				  
+				}
+				.form-signin input[type="password"] {
+					width: 100%;
+					margin: 0;
+					padding: 5px 10px;
+					background: 0;
+					background-image: initial;
+					background-position-x: 0px;
+					background-position-y: 50%;
+					background-size: initial;
+					background-repeat-x: initial;
+					background-repeat-y: initial;
+					background-attachment: initial;
+					background-origin: initial;
+					background-clip: initial;
+					background-color: initial;
+					border: 0;
+					border-bottom: 1px solid #FFFFFF;
+					outline: 0;
+					font-style: italic;
+					font-size: 12px;
+					font-weight: 400;
+					letter-spacing: 1px;
+					margin-bottom: 55px;
+					color: #FFFFFF;
+					outline: 0;
+				}
+				
+				.form-title{
+					font-family: 'Open Sans' , sans-serif;
+					font-size: 20px;
+					font-weight: 600;
+					text-align: center;
+					color: #FFFFFF;
+					margin-top: 5%;
+					margin-bottom: 10%;
+					text-transform: uppercase;
+					letter-spacing: 4px;
+				}
+				
+				.form-control{
+					 border-radius: 0;
+					 -webkit-box-shadow: none; 
+					 box-shadow: none; 
+					 -webkit-transition: border-color ease-in-out 0,-webkit-box-shadow ease-in-out 0; 
+					-o-transition: border-color ease-in-out 0,box-shadow ease-in-out  0;
+					 transition: border-color ease-in-out 0,box-shadow ease-in-out 0; 
+				}
+				
+				form
+				{
+					width: 300px;
+					margin: 80px auto;
+				}
+
+				form.login input[type="text"], form.login input[type="password"]
+				{
+					width: 100%;
+					margin: 0;
+					padding: 5px 10px;
+					background: 0;
+					border: 0;
+					border-bottom: 1px solid #FFFFFF;
+					outline: 0;
+					font-style: italic;
+					font-size: 12px;
+					font-weight: 400;
+					letter-spacing: 1px;
+					margin-bottom: 5px;
+					color: #FFFFFF;
+					outline: 0;
+				}
+
+				form.login input[type="submit"]
+				{
+					width: 100%;
+					font-size: 14px;
+					text-transform: uppercase;
+					font-weight: 500;
+					margin-top: 16px;
+					outline: 0;
+					cursor: pointer;
+					letter-spacing: 1px;
+				}
+
+				.btn-primary:hover
+				{
+					background-color : transparent;
+					border-color: transparent;
+				}
+				button{
+					margin-top:50px;
+				}
+				
+				.btn-primary{
+					background-color:transparent;
+					border-color : transparent;
+				}
+				
+				#register{
+					/*display:none;*/
+					margin-top: 15px;
+					margin-right:auto;
+					margin-left:auto;
+					max-width: 330px;
+					padding: 15px;
+					height:300px;
+					text-align:center;
+				}
+				
+				#title{
+					margin-top:-30px;
+					margin-bottom:10px;
+					text-align:center;
+					color:#2980b9;
+				}
+				#hostRequest{
+					margin-right:auto;
+					margin-left:auto;
+					text-align:center;
+				}
+			</style>
+		<style type="text/css"></style></head>
+		<body ng-controller="Application as page" class="ng-scope">
+			<div class="navbar navbar-default" style="display: none;">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						  <span class="sr-only">Toggle navigation</span>
+						  <span class="icon-bar"></span>
+						  <span class="icon-bar"></span>
+						  <span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">Angular Project</a>
+					</div>
+				    <div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							  <li class="active"><a href="#">Home</a></li>
+							  <li><a href="#about">About</a></li>
+						</ul>
+				  </div><!--/.nav-collapse -->
+				</div>
+			</div>
+		<form class="form-signin login ng-scope ng-valid ng-valid-required ng-dirty" role="form" ng-controller="Signin as sign" ng-show="page.auth == true">
+			<div id="title">
+				<h1 class="ng-binding">GeoPass</h1>
+			</div>
+			<div id="sign-in" ng-show=" page.getDiv() === 1 " class="ng-hide">
+				<h2 class="form-signin-heading form-title">Please sign in</h2>
+				<input type="email" placeholder="Username" ng-model="user.email" class="ng-pristine ng-valid ng-valid-email">
+				<input type="password" placeholder="Password" ng-model="user.pass" class="ng-pristine ng-valid">
+				<button class="btn btn-lg btn-primary btn-block sign" type="submit" ng-click="page.getData(user)">Submit</button>
+				<button class="btn btn-lg btn-primary btn-block register" type="submit" ng-click="page.setDiv('register')">Register</button>
+			</div>
+			
+			<div id="register" class="register-form" ng-show=" page.getDiv() === 2 ">
+				<h3 class=" form-title">Register</h3>
+				<input placeholder="Email" type="text" ng-model="page.newUser.email" class="ng-valid ng-dirty">
+				<input placeholder="Password" type="password" ng-model="page.newUser.pass" class="ng-valid ng-dirty">
+				<input placeholder="Re-enter Password" type="password" ng-model="page.newUser.cpass" class="ng-valid ng-dirty">
+				<div id="" ng-show="page.buttonText == 'Host'" class="">
+					<input type="text" placeholder="SSID" ng-required="false" ng-model="page.newUser.ssid" class="ng-valid ng-valid-required ng-dirty">
+				</div>
+				<div class="btn-group">
+					  <button id="usertype" class="btn btn-info btn-xs dropdown-toggle ng-binding" type="button" data-toggle="dropdown">
+						{{page.buttonText}} <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu" role="menu">
+							<li id="" ng-click="page.setText('Host')"><a href="#">Host</a></li>
+							<li id="" ng-click="page.setText('Guest')"><a href="#">Guest</a></li>
+					  </ul>
+				</div>
+				<button id="" class="btn btn-lg btn-primary btn-block sign" type="submit" ng-click="page.getData(page.newUser)">Submit</button>
+				<button id="" class="btn btn-lg btn-primary btn-block register" type="submit" ng-click="page.setDiv('sign')">Sign In</button>
+			</div>
+			
+		</form>
+		
+		<div class="container" ng-show="page.auth == false">
+			<div class="col-xs-12 col-md-12 text-center">
+				<h2>Welcome<b> {{page.user.email}}</b></h2>
+			</div> 
+			<div class="col-xs-12 col-md-12">
+				<h2>Auth: {{page.auth}}</h2>
+			</div>
+		</div>
+			
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+			<script src="./app.js"></script>
+			<script src="./geoGPS.js"></script>
+			<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+			
+			<script>
+	                       var page = window.location.href.split('/');
+				var splitpage = page[page.length - 2];
+				if(splitpage == "GeoPass" || splitpage == " "){
+					$('.navbar').hide(500);
+				}
+				
+				/*$(document).ready(function(){
+				
+				$('.register').click(function(){
+					$('#register').show(1250);
+					$('#sign-in').hide(500);
+				});
+				
+				$('#buttonSignin').click(function(){
+					$('#sign-in').show(1250);
+					$('#register').hide(500);
+				});
+				
+				
+				$('#host').click(function(){
+					$('#usertype').html('Host <span class="caret"></span>');
+					$('#hostRequest').show(500);
+				});
+				
+				$('#guest').click(function(){
+					$('#usertype').html('Guest <span class="caret"></span>');
+					if($('#hostRequest')){
+						$('#hostRequest').hide(500);
+					}
+				});
+				/*$('body').mousemove(function( event ) {
+				  var pageCoords = "( " + event.pageX + ", " + event.pageY + " )";
+				  var clientCoords = "( " + event.clientX + ", " + event.clientY + " )";
+				  $('body').css('background', "rgb(" + event.clientY + "," + event.clientX + "," + event.clientY +")");
+				});
+				});*/
+			</script>
+		
+	</body></html>
