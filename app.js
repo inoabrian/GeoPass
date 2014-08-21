@@ -9,7 +9,11 @@
 	app.controller('Application', ['$scope','$http', function($scope,$http) {
       //$http is working in this
 	    this.div = 'sign';
-		this.auth = true;  
+		this.auth = true;
+		
+		this.userEmail = '';
+		this.userName = '';
+		this.ssid = ''; 
 		
 		this.getData = function(obj){
 			if(this.div == 'register'){
@@ -32,6 +36,10 @@
 		this.authFunc = function(data){
 			if(typeof data != ' null'){
 				this.auth = false;
+				this.userEmail = data.email;
+				this.userName = data.email;
+				this.ssid = data.hashpass;
+				console.log(data.ssid);
 			}
 		};
 		
@@ -50,6 +58,7 @@
 				if(flag == true){
 					var newdata = "email=" + obj.email + "&pass=" + obj.pass + "&cpass=" + obj.cpass + "&ssid=" + obj.ssid;
 					if(direction == 'register'){
+						obj.regtime = new Date().toJSON().substr(0,10);
 						var $promise = $http.post("../php-bin/geoPassUpdateNewUsers.php",obj);
 						$promise.then(function(msg){
 							if(msg.statusText  == "OK"){ 
@@ -95,7 +104,7 @@
 		this.buttonText = 'User Type:';
 		this.setText = function(text){
 			this.buttonText = text;
-			ourobj.type = text;
+			ourobj.type = this.buttonText;
 		}
 	}]);
 	
