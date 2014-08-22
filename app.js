@@ -25,9 +25,6 @@
 		// creates our object to send in the ajax $http request
 		this.getData = function(obj){
 			if(this.div == 'register'){
-				if(obj.type = "Guest"){
-					obj.ssid = 'Guest';
-				}
 				for( var properties in obj){
 					ourobj[properties] = obj[properties];
 				}
@@ -49,7 +46,7 @@
 				this.userEmail = data.email;
 				this.userName = data.email;
 				console.log(data.email);
-				if(data.hashpass){
+				if(data.hashpass){ 
 					this.ssid = data.hashpass;
 					console.log(data.ssid);
 				}
@@ -81,9 +78,9 @@
 						var $promise = $http.post("../php-bin/geoPassUpdateNewUsers.php",obj);
 						$promise.then(function(msg){
 							if(msg.statusText  == "OK"){ 
-								 // can be used for login form and have to compare the data recieved and the data in form.
-									console.log('success geoPassUpdateNewUsers');
-									page.authFunc(msg);
+								// can be used for login form and have to compare the data recieved and the data in form.
+								console.log('success geoPassUpdateNewUsers');
+								page.authFunc(obj);
 							}else{
 								console.log('unsuccessful login geoPassUpdateNewUsers');
 								page.authFunc(msg);
