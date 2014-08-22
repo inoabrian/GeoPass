@@ -72,9 +72,7 @@
 						break;
 					}
 				}
-				// Check if obj has all of its properties
-				// and send an ajax request with the updated obj object.
-				// The object can hold either a login object or the ourobj user object.
+				// Check if obj ha
 				if(flag == true){
 					//newdata is not used
 					//var newdata = "email=" + obj.email + "&pass=" + obj.pass + "&cpass=" + obj.cpass + "&ssid=" + obj.ssid;
@@ -84,18 +82,14 @@
 						$promise.then(function(msg){
 							if(msg.statusText  == "OK"){ 
 								 // can be used for login form and have to compare the data recieved and the data in form.
-								console.log('success geoPassUpdateNewUsers');
-
-								// need to create function similar to authFunc except it just routes to the users 
-								// appropriate functionality
-								//page.authFunc(msg);
+									console.log('success geoPassUpdateNewUsers');
+									page.authFunc(msg);
 							}else{
 								console.log('unsuccessful login geoPassUpdateNewUsers');
-								//// need to create function similar to authFunc except it just routes to the users 
-								// appropriate functionality or error message.
-								//page.authFunc(msg);
+								page.authFunc(msg);
 							}
-											}else if(direction == 'login'){
+						});
+					}else if(direction == 'login'){
 						// should change script to $http.get();
 							var $promise = $http.post("../php-bin/geoPassUsers.php",obj).success(function(data) {
 								//app.people = data;
