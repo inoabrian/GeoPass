@@ -34,7 +34,7 @@
 		};
 		
 		this.authFunc = function(data){
-			if(typeof data != null || typeof data != ' null' || data != undefined || data != ''){
+			if(typeof data != null && data != ' null' && data != undefined && data != " "){
 				this.auth = false;
 				this.userEmail = data.email;
 				this.userName = data.email;

@@ -20,7 +20,7 @@ GpsFence.isValid = function(){
 			num += 1;
 		}
 	}
-	if(num == 4){
+	if(num == 4){ 
 		this.valid = true;
 	}
 };
