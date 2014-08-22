@@ -7,14 +7,22 @@
 	});
 	
 	app.controller('Application', ['$scope','$http', function($scope,$http) {
-      //$http is working in this
+      	
+      	//$http is working in this
 	    this.div = 'sign';
 		this.auth = true;
 		
+		// To either show host settings, or guest scan functionality.
+
+		this.guest = false;
+		this.ahost = false;
+
+		// Used to display user's data
 		this.userEmail = '';
 		this.userName = '';
 		this.ssid = ''; 
 		
+		// creates our object to send in the ajax $http request
 		this.getData = function(obj){
 			if(this.div == 'register'){
 				if(obj.type = "Guest"){
@@ -33,6 +41,8 @@
 			this.newUser = {};
 		};
 		
+		// Sets auth to true or false, and checks if user has signed in correctly
+		// then proceeds to show functionality.
 		this.authFunc = function(data){
 			if(typeof data != null && data != ' null' && data != undefined && data != " "){
 				this.auth = false;
@@ -49,6 +59,7 @@
 			}
 		};
 		
+		//	called with the user obj as parameter and direction whether it be login or register
 		this.sendRequest = function(obj, direction){
 			var page = this;
 			var flag = true;
@@ -61,22 +72,30 @@
 						break;
 					}
 				}
+				// Check if obj has all of its properties
+				// and send an ajax request with the updated obj object.
+				// The object can hold either a login object or the ourobj user object.
 				if(flag == true){
-					var newdata = "email=" + obj.email + "&pass=" + obj.pass + "&cpass=" + obj.cpass + "&ssid=" + obj.ssid;
+					//newdata is not used
+					//var newdata = "email=" + obj.email + "&pass=" + obj.pass + "&cpass=" + obj.cpass + "&ssid=" + obj.ssid;
 					if(direction == 'register'){
 						obj.regtime = new Date().toJSON().substr(0,10);
 						var $promise = $http.post("../php-bin/geoPassUpdateNewUsers.php",obj);
 						$promise.then(function(msg){
 							if(msg.statusText  == "OK"){ 
 								 // can be used for login form and have to compare the data recieved and the data in form.
-									console.log('success geoPassUpdateNewUsers');
-									page.authFunc(msg);
+								console.log('success geoPassUpdateNewUsers');
+
+								// need to create function similar to authFunc except it just routes to the users 
+								// appropriate functionality
+								//page.authFunc(msg);
 							}else{
 								console.log('unsuccessful login geoPassUpdateNewUsers');
-								page.authFunc(msg);
+								//// need to create function similar to authFunc except it just routes to the users 
+								// appropriate functionality or error message.
+								//page.authFunc(msg);
 							}
-						});
-					}else if(direction == 'login'){
+											}else if(direction == 'login'){
 						// should change script to $http.get();
 							var $promise = $http.post("../php-bin/geoPassUsers.php",obj).success(function(data) {
 								//app.people = data;
@@ -94,6 +113,7 @@
 			}
 		};
 		
+		// Sets the div to be show when the login or register buttons are clicked
 		this.getDiv = function(){
 			if(this.div == 'sign'){
 				return 1;
@@ -103,10 +123,12 @@
 			}
 		};
 		
+		// 	Assign div name to controllers div property
 		this.setDiv = function(div){
 			this.div = div;
 		};
 		
+		// Assigns user type drop down text when value is clicked 
 		this.buttonText = 'User Type:';
 		this.setText = function(text){
 			this.buttonText = text;
@@ -114,6 +136,7 @@
 		}
 	}]);
 	
+
 	var ourobj = {
 		email : '',
 		pass : '',
