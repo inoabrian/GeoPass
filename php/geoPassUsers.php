@@ -4,7 +4,7 @@ $user = json_decode(file_get_contents('php://input'));
 $email = $user->email;
 $pass = $user->pass;
 
-$con = mysqli_connect("localhost", "", "", "");
+$con = mysqli_connect("localhost", "inoaurxc_admin", "Aug2014B", "inoaurxc_GeoPass");
 // Check connection
 if (mysqli_connect_errno()) {
     //echo "Failed to connect to MySQL: " . mysqli_connect_error(); 
