@@ -8,7 +8,7 @@ $ssid = $user->ssid;
 $type = $user->type;
 $date = $user->regtime;
 
-$con = mysqli_connect("localhost", "inoaurxc_admin", "Aug2014B", "inoaurxc_GeoPass");
+$con = mysqli_connect("localhost", "", "", "");
 // Check connection
 if (mysqli_connect_errno()){
     echo "Failed to connect to MySQL: " . mysqli_connect_error(); 
@@ -23,4 +23,8 @@ if ($result = mysqli_query($con,$validateEmail)) {
 	}
 }
 mysqli_close($con);
+<<<<<<< HEAD
 ?> 
+=======
+?>
+>>>>>>> cf589ea599aaa7da09b157cd90e1161ca4ce607d
