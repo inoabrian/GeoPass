@@ -20,7 +20,7 @@ if ($result = mysqli_query($con,$validateEmail)) {
 		
 		$date = '2014-08-13'; 
 
-		$sql = "SELECT `email`, `type`, `date`, `state`, `zipcode`, `address`, `hashpass` FROM `newUsers` WHERE `email` = '$email' && `hashpass` = '$pass'"; 
+		$sql = "SELECT `email`, `type`, `date`, `hashpass` FROM `newUsers` WHERE `email` = '$email' && `hashpass` = '$pass'"; 
 		//"SELECT `email`, `type`, `date`, `state`, `zipcode`, `address`, `hashpass` FROM `newUsers` WHERE `hashpass` = '$pass'";
 
 		

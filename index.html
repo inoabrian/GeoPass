@@ -209,9 +209,8 @@
 				<!-- Collection of nav links, forms, and other content for toggling -->
 				<div id="navbarCollapse" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Profile</a></li>
-						
+						<li class="active links"><a href="#">Home</a></li>
+						<li class="links"><a href="#">Profile</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#"> {{page.userEmail}} </a></li>
@@ -239,7 +238,7 @@
 					<input type="text" placeholder="SSID" ng-required="false" ng-model="page.newUser.ssid" class="ng-valid ng-valid-required ng-dirty">
 				</div>
 				<div class="btn-group">
-					  <button id="usertype" class="btn btn-info btn-xs dropdown-toggle ng-binding" type="button" data-toggle="dropdown">
+					  <button id="usertype" class="btn btn-info btn-md dropdown-toggle ng-binding" type="button" data-toggle="dropdown">
 						{{page.buttonText}} <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu" role="menu">
@@ -258,7 +257,7 @@
 				<form class="form-signin login ng-scope ng-valid ng-valid-required ng-dirty text-center" role="form" >
 					<h4 id = "title" >{{page.userName}}</h4>
 					<h4>{{page.ssid}}</h4>
-					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" onClick="GpsFence.getGps()">Set GPS</button>
+					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" id="setGPS" onClick="GpsFence.getGps()">Set GPS</button>
 				</form>
 				<div id ="map-canvas"></div>
 			</div>
@@ -278,8 +277,12 @@
 					$('.navbar').hide(500);
 				}
 				
-				/*$(document).ready(function(){
-				
+				*/
+
+				$(document).ready(function(){
+					$('.links').hide();
+				});
+				/*
 				$('.register').click(function(){
 					$('#register').show(1250);
 					$('#sign-in').hide(500);
