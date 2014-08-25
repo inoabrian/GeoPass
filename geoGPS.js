@@ -52,9 +52,7 @@ GpsFence.addGps = function (position){
 		}
 }
 
-GpsFence.allowedPoints = function(singlePoint){  
-	    
-	    console.log('Latitude and Longitude Points: from line 57: ' + singlePoint.lat + singlePoint.lng);
+GpsFence.allowedPoints = function(singlePoint){ 
 	    var latitude = singlePoint.lat;
 	    var longitude = singlePoint.lng;
 
@@ -64,32 +62,23 @@ GpsFence.allowedPoints = function(singlePoint){
 	    var latitudeDifference = (Math.ceil(latitude) - latitude);
 	    var longitudeDifference = (Math.ceil(longitude) - longitude);
 
-	    console.log(latitudeDifference);
-	    GpsFence.calculateAllowed(latitude, 10);
-	    GpsFence.calculateAllowed(longitude, 10);
+	    var latPositive = GpsFence.calculateAllowedUpRight(latitude, 10);
+	    var longPositive = GpsFence.calculateAllowedUpRight(longitude, 10);
+	    var latNegative = GpsFence.calculateAllowedDownLeft(latitude, 10);
+	    var longNegative = GpsFence.calculateAllowedDownLeft(longitude, 10);
 };
 
-GpsFence.calculateAllowed = function(point,distance){
+GpsFence.calculateAllowedUpRight = function(point,distance){
 	var distance = distance;
-	var initialdistance =  (Math.ceil(point) - point);
+/*	var initialdistance =  (Math.ceil(point) - point);
 	initialdistance = Math.round(initialdistance*10000)/10000;
 	var endValue  = Math.ceil(point);
-	/*console.log(distance);
-	console.log('distance');
-	console.log(initialdistance);
-	console.log('initialdistance');
-	console.log(endValue);
-	console.log('endValue'); 
-
-	console.log((distance + (point + initialdistance)));
-	console.log('added');
-	*/
 
 	endValue = Math.round(endValue*10000)/10000;
 
 	point = Math.round(point*10000)/10000;
 	var allowed = new Array();
-	while( ( point < (distance + (endValue + initialdistance) ) ) ) {
+	while( ( point < (distance + (endValue) ) ) ) {
 		point += 0.0001;
 
 		point = Math.round(point*10000)/10000;
@@ -97,8 +86,50 @@ GpsFence.calculateAllowed = function(point,distance){
 		p = Math.round(point*10000)/10000;
 
 		allowed.push(p);
-	}
-	console.log(allowed);
+	}*/
+	var myWorker = new Worker("calculateAllowedUpRight.js");
+
+	myWorker.onmessage = function (oEvent) {
+	  console.log("Worker calculateAllowedUpRight said : " + oEvent.data);
+	  return oEvent.data;
+	};
+
+	obj = {
+		point : point,
+		distance : distance
+	};
+
+	myWorker.postMessage(JSON.stringify(obj));
+	
+};
+
+GpsFence.calculateAllowedDownLeft = function( point,distance){
+	var distance = distance;
+	var initialdistance =  (Math.ceil(point) - point);
+	initialdistance = Math.round(initialdistance*10000)/10000;
+
+	var endValue;
+
+	point = Math.round(point*10000)/10000;  
+
+	var negWorker = new Worker("calculateAllowedDownLeft.js");
+
+	negWorker.onmessage = function (oEvent) {
+		console.log("Worker calculateAllowedDownLeft said : " + oEvent.data);
+		return oEvent.data;
+		GpsFence.doneCalculating(oEvent.data);
+	};
+
+	obj = {
+		point : point,
+		distance : distance
+	};
+
+	negWorker.postMessage(JSON.stringify(obj));
+};
+
+GpsFence.doneCalculating = function(data){
+	console.log('data reached done calculating: ' + data);
 };
 
 
