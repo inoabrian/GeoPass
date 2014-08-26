@@ -26,9 +26,9 @@ onmessage = function (oEvent) {
 };*/
 
 self.addEventListener('message', function(e) {
-  	var Event = JSON.parse(oEvent);
-  	var point = Event.data.point;
-  	var distance = Event.data.distance;
+  	var Event = JSON.parse(e.data);
+  	var point = Event.point;
+  	var distance = Event.distance;
 
 	var initialdistance =  (Math.ceil(point) - point);
 	initialdistance = Math.round(initialdistance*10000)/10000;

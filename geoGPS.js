@@ -62,31 +62,15 @@ GpsFence.allowedPoints = function(singlePoint){
 	    var latitudeDifference = (Math.ceil(latitude) - latitude);
 	    var longitudeDifference = (Math.ceil(longitude) - longitude);
 
-	    var latPositive = GpsFence.calculateAllowedUpRight(latitude, 10);
-	    var longPositive = GpsFence.calculateAllowedUpRight(longitude, 10);
-	    var latNegative = GpsFence.calculateAllowedDownLeft(latitude, 10);
-	    var longNegative = GpsFence.calculateAllowedDownLeft(longitude, 10);
+	    var latPositive = GpsFence.calculateAllowedUpRight(latitude, 5);
+	    var longPositive = GpsFence.calculateAllowedUpRight(longitude, 5);
+	    var latNegative = GpsFence.calculateAllowedDownLeft(latitude, 5);
+	    var longNegative = GpsFence.calculateAllowedDownLeft(longitude, 5);
 };
 
 GpsFence.calculateAllowedUpRight = function(point,distance){
 	var distance = distance;
-/*	var initialdistance =  (Math.ceil(point) - point);
-	initialdistance = Math.round(initialdistance*10000)/10000;
-	var endValue  = Math.ceil(point);
 
-	endValue = Math.round(endValue*10000)/10000;
-
-	point = Math.round(point*10000)/10000;
-	var allowed = new Array();
-	while( ( point < (distance + (endValue) ) ) ) {
-		point += 0.0001;
-
-		point = Math.round(point*10000)/10000;
-		
-		p = Math.round(point*10000)/10000;
-
-		allowed.push(p);
-	}*/
 	var myWorker = new Worker("calculateAllowedUpRight.js");
 
 	myWorker.onmessage = function (oEvent) {
