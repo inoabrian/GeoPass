@@ -2,7 +2,11 @@ var GpsFence = {
 	valid : false,
 	points: [],
 	pNum: 1,
-	name:'description'
+	name:'description',
+	map: null,
+	allowedLat: null,
+	allowedLong: null,
+	called : 0
 };
  
 GpsFence.getGps = function(){
@@ -39,11 +43,11 @@ GpsFence.addGps = function (position){
 			disableDefaultUI: true
 		};
 		if(GpsFence.pNum == 1){
-        	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+        	GpsFence.map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
         
-	    	new google.maps.Marker({position: {lat: position.coords.latitude, lng: position.coords.longitude}, map: map});
+	    	new google.maps.Marker({position: {lat: position.coords.latitude, lng: position.coords.longitude}, map: GpsFence.map});
 	    	var latlong = [position.coords.latitude, position.coords.longitude];
-	    	map.panTo({lat: position.coords.latitude, lng: position.coords.longitude});
+	    	GpsFence.map.panTo({lat: position.coords.latitude, lng: position.coords.longitude});
 	    	GpsFence.pNum += 1;
 	    	document.getElementById('setGPS').innerHTML = 'GPS SET'; 
 	    	GpsFence.allowedPoints({lat: position.coords.latitude, lng: position.coords.longitude});
@@ -62,21 +66,31 @@ GpsFence.allowedPoints = function(singlePoint){
 	    var latitudeDifference = (Math.ceil(latitude) - latitude);
 	    var longitudeDifference = (Math.ceil(longitude) - longitude);
 
-	    var latPositive = GpsFence.calculateAllowedUpRight(latitude, 5);
-	    var longPositive = GpsFence.calculateAllowedUpRight(longitude, 5);
-	    var latNegative = GpsFence.calculateAllowedDownLeft(latitude, 5);
-	    var longNegative = GpsFence.calculateAllowedDownLeft(longitude, 5);
+	    GpsFence.calculateAllowedUpRight(latitude, parseFloat(".00002"), 'latitude');
+	    GpsFence.calculateAllowedUpRight(longitude, parseFloat(".00002"), 'longitude');
+	    GpsFence.calculateAllowedDownLeft(latitude, parseFloat(".00002"), 'latitude');
+	    GpsFence.calculateAllowedDownLeft(longitude, parseFloat(".00002"), 'longitude');
+	    
+
 };
 
-GpsFence.calculateAllowedUpRight = function(point,distance){
+GpsFence.calculateAllowedUpRight = function(point,distance,pointType){
 	var distance = distance;
 
 	var myWorker = new Worker("calculateAllowedUpRight.js");
 
+	var pointer = GpsFence;
 	myWorker.onmessage = function (oEvent) {
-	  console.log("Worker calculateAllowedUpRight said : " + oEvent.data);
+
+	  if(pointType == 'latitude'){
+	  	GpsFence.allowedLat = JSON.parse(oEvent.data);
+	  	pointer.doneCalculating();
+	  }else{
+	  	GpsFence.allowedLong = JSON.parse(oEvent.data);
+	  	pointer.doneCalculating();
+	  }
 	  myWorker.terminate();
-	  return oEvent.data;
+	  //pointer.doneCalculating();
 	};
 
 	obj = {
@@ -88,7 +102,7 @@ GpsFence.calculateAllowedUpRight = function(point,distance){
 	
 };
 
-GpsFence.calculateAllowedDownLeft = function( point,distance){
+GpsFence.calculateAllowedDownLeft = function( point,distance, pointType){
 	var distance = distance;
 	var initialdistance =  (Math.ceil(point) - point);
 	initialdistance = Math.round(initialdistance*10000)/10000;
@@ -99,11 +113,19 @@ GpsFence.calculateAllowedDownLeft = function( point,distance){
 
 	var negWorker = new Worker("calculateAllowedDownLeft.js");
 
+	var pointer = GpsFence;
+
 	negWorker.onmessage = function (oEvent) {
-		console.log("Worker calculateAllowedDownLeft said : " + oEvent.data);
-		negWorker.terminate();
-		return oEvent.data;
-		GpsFence.doneCalculating(oEvent.data);
+		//console.log("Worker calculateAllowedDownLeft said : " + oEvent.data);
+		  if(pointType == 'latitude'){
+	  		GpsFence.allowedLat = JSON.parse(oEvent.data);
+	  		pointer.doneCalculating();
+		  }else{
+		  	GpsFence.allowedLong = JSON.parse(oEvent.data);
+		  	pointer.doneCalculating();
+		  }
+		  negWorker.terminate();
+		//pointer.doneCalculating(oEvent.data);
 	};
 
 	obj = {
@@ -114,8 +136,25 @@ GpsFence.calculateAllowedDownLeft = function( point,distance){
 	negWorker.postMessage(JSON.stringify(obj));
 };
 
-GpsFence.doneCalculating = function(data){
-	console.log('data reached done calculating: ' + data);
+GpsFence.doneCalculating = function(){
+	if(GpsFence.called != 2){
+		GpsFence.called += 1;
+	}else{
+		
+		for(var i = 0; i < GpsFence.allowedLong.longitude.length && i < GpsFence.allowedLat.latitude.length; i++){
+			new google.maps.Marker({position: {lat: GpsFence.allowedLat.latitude[i] , lng: GpsFence.allowedLong.longitude[i]}, map: GpsFence.map});
+		}
+		console.log('done calculating');
+	}
+	//console.log('data reached done calculating: ' + data);
+	/*var allowed = JSON.parse(data);
+	if(typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+    	localStorage.setItem("allowed", allowed.latitude);
+	} else {
+	    // Sorry! No Web Storage support..
+	}
+	*/
 };
 
 

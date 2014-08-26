@@ -48,7 +48,6 @@
 				console.log(data.email);
 				if(data.hashpass){ 
 					this.ssid = data.hashpass;
-					console.log(data.ssid);
 				}
 			}else{
 				this.auth = true;

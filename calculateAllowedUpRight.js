@@ -47,6 +47,18 @@ self.addEventListener('message', function(e) {
 
 		allowed.push(p);
 	}
+	if(point < 0 ){
+		var tempobj = { 
+			'longitude' : allowed
+		};
 
-  	self.postMessage('command: ' + allowed);
+  		self.postMessage( JSON.stringify(tempobj) );
+	}else{
+		var tempobj = {
+		 'latitude' : allowed
+		};
+
+  		self.postMessage( JSON.stringify(tempobj) );
+	}
+
 }, false);

@@ -53,6 +53,7 @@ self.addEventListener('message', function(e) {
 	point = Math.round(point*10000)/10000;
 	var allowed = new Array();
 	if(point < 0){
+		key = 'longitude';
 		while( ( point > ( endValue - (distance / 2) ) ) ) {
 			if(point.toString().length == 5){
 				point += 0.001; 
@@ -63,8 +64,13 @@ self.addEventListener('message', function(e) {
 
 			allowed.push(point);
 		}
-		alert('done');
+		var tempobj = { 
+			'longitude' : allowed
+		};
+
+  		self.postMessage( JSON.stringify(tempobj) );
 	}else{
+		key = 'latitude';
 		while( ( point > (endValue - distance) ) ) {
 			point -= 0.0001;
 
@@ -72,6 +78,10 @@ self.addEventListener('message', function(e) {
 
 			allowed.push(point); 
 		}
+		var tempobj = {
+		 'latitude' : allowed
+		};
+
+  		self.postMessage( JSON.stringify(tempobj) );
 	}
-  	self.postMessage('command: ' + allowed);
 }, false);
