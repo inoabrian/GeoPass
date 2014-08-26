@@ -75,6 +75,7 @@ GpsFence.calculateAllowedUpRight = function(point,distance){
 
 	myWorker.onmessage = function (oEvent) {
 	  console.log("Worker calculateAllowedUpRight said : " + oEvent.data);
+	  myWorker.terminate();
 	  return oEvent.data;
 	};
 
@@ -100,6 +101,7 @@ GpsFence.calculateAllowedDownLeft = function( point,distance){
 
 	negWorker.onmessage = function (oEvent) {
 		console.log("Worker calculateAllowedDownLeft said : " + oEvent.data);
+		negWorker.terminate();
 		return oEvent.data;
 		GpsFence.doneCalculating(oEvent.data);
 	};
