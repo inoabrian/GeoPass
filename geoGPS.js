@@ -6,7 +6,9 @@ var GpsFence = {
 	map: null,
 	allowedLat: null,
 	allowedLong: null,
-	called : 0
+	called : 0,
+	newpoints: [],
+	id: null
 };
  
 GpsFence.getGps = function(){
@@ -59,20 +61,70 @@ GpsFence.addGps = function (position){
 GpsFence.allowedPoints = function(singlePoint){ 
 	    var latitude = singlePoint.lat;
 	    var longitude = singlePoint.lng;
-
+	    GpsFence.allowedLat = latitude;
+	    GpsFence.allowedLong = longitude;
 	    // I have to generate east, west allowed points.
 	    // Then I have to generate the north, south allowed points.
 
 	    var latitudeDifference = (Math.ceil(latitude) - latitude);
 	    var longitudeDifference = (Math.ceil(longitude) - longitude);
 
-	    GpsFence.calculateAllowedUpRight(latitude, parseFloat(".00002"), 'latitude');
-	    GpsFence.calculateAllowedUpRight(longitude, parseFloat(".00002"), 'longitude');
-	    GpsFence.calculateAllowedDownLeft(latitude, parseFloat(".00002"), 'latitude');
-	    GpsFence.calculateAllowedDownLeft(longitude, parseFloat(".00002"), 'longitude');
-	    
+	    //--GpsFence.calculateAllowedUpRight(latitude, parseFloat(".00002"), 'latitude');
+	    //--GpsFence.calculateAllowedUpRight(longitude, parseFloat(".00002"), 'longitude');
+	    //--GpsFence.calculateAllowedDownLeft(latitude, parseFloat(".00002"), 'latitude');
+	    //--GpsFence.calculateAllowedDownLeft(longitude, parseFloat(".00002"), 'longitude');
+	    var callback = GpsFence.doneCalculating;
+
+	    for(var iterations = 0; iterations < 360; iterations++){
+	    	if((iterations % 12) == 0){
+	    		var pointsToPush = geoDestination([latitude,longitude], 0.003048, iterations, callback);
+	    		GpsFence.newpoints.push(pointsToPush);
+	    	}
+	    }
+
+	    //---var first 	= geoDestination([latitude,longitude], 0.003048, 0, callback);
+	    //--GpsFence.newpoints.push(first);
+	    //--var second 	= geoDestination([latitude,longitude], 0.003048, 90, callback);
+	    //--GpsFence.newpoints.push(second);
+	    //--var third 	= geoDestination([latitude,longitude], 0.003048, 180, callback);
+	    //--GpsFence.newpoints.push(third);
+    	//--var fourth 	= geoDestination([latitude,longitude], 0.003048, 270, callback);
+    	//--GpsFence.newpoints.push(fourth);
+    	callback();
 
 };
+
+//start is a array [lat, long]
+//dist in km
+//brng in degrees
+function geoDestination(start, dist, brng, callback){
+   lat1 = toRad(start[0]);
+   lon1 = toRad(start[1]);
+   dist = dist/6371.01; //Earth's radius in km
+   brng = toRad(brng);
+
+   lat2 = Math.asin( Math.sin(lat1)*Math.cos(dist) +
+              Math.cos(lat1)*Math.sin(dist)*Math.cos(brng) );
+   lon2 = lon1 + Math.atan2(Math.sin(brng)*Math.sin(dist)*Math.cos(lat1),
+                      Math.cos(dist)-Math.sin(lat1)*Math.sin(lat2));
+   lon2 = fmod((lon2+3*Math.PI),(2*Math.PI)) - Math.PI;  
+   callback();
+   return [toDeg(lat2),toDeg(lon2)];
+}
+
+function toRad(deg){
+   return deg * Math.PI / 180;
+}
+
+function toDeg(rad){
+   return rad * 180 / Math.PI;
+}
+
+function fmod(a, b) {
+   return Number((a - (Math.floor(a / b) * b)).toPrecision(8));
+}
+
+
 
 GpsFence.calculateAllowedUpRight = function(point,distance,pointType){
 	var distance = distance;
@@ -137,12 +189,12 @@ GpsFence.calculateAllowedDownLeft = function( point,distance, pointType){
 };
 
 GpsFence.doneCalculating = function(){
-	if(GpsFence.called != 2){
+	if(GpsFence.called != 4){
 		GpsFence.called += 1;
 	}else{
 		
-		for(var i = 0; i < GpsFence.allowedLong.longitude.length && i < GpsFence.allowedLat.latitude.length; i++){
-			new google.maps.Marker({position: {lat: GpsFence.allowedLat.latitude[i] , lng: GpsFence.allowedLong.longitude[i]}, map: GpsFence.map});
+		for(var i = 0; i < GpsFence.newpoints.length; i++){
+			new google.maps.Marker({position: {lat: GpsFence.newpoints[i][0] , lng:  GpsFence.newpoints[i][1]}, map: GpsFence.map});
 		}
 		console.log('done calculating');
 	}
@@ -157,5 +209,65 @@ GpsFence.doneCalculating = function(){
 	*/
 };
 
+
+GpsFence.checkingThePoints = function (){
+	if ("geolocation" in navigator) {
+		var option = {
+			enableHighAccuracy: 	true,
+			timeout: 				Infinity,
+			maximumAge: 			0
+		};
+
+		GpsFence.id = navigator.geolocation.watchPosition(success, fail, option);
+  /* geolocation is available */
+	} else {
+	  /* geolocation IS NOT available */
+	}
+};
+
+function success (position){
+	
+	var latLngCircleCenter = new google.maps.LatLng(GpsFence.allowedLat, GpsFence.allowedLong);
+
+	var maxDist = 10000;
+
+	for(var iterator = 0; iterator < GpsFence.newpoints.length; iterator++){ 
+
+		var comparePoint = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+		var distanceInMetres = google.maps.geometry.spherical.computeDistanceBetween(latLngCircleCenter, comparePoint);
+
+		if(distanceInMetres <= maxDist){
+
+			maxDist  = distanceInMetres;
+
+   			console.log('Max Dist: ' + maxDist);
+   			console.log('Distance In Meters: ' + distanceInMetres);
+			var image = "http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-666666/shapecolor-dark/shadow-1/border-white/symbolstyle-white/symbolshadowstyle-no/gradient-no/number_" + (iterator + 1) + ".png";
+   			new google.maps.Marker({
+			      position: comparePoint,
+			      map: GpsFence.map,
+			      icon: image,
+			      draggable:true
+		    });
+		    //ajax call for pass word and send it to updatePass.
+		    var pass = '123#Bd';
+		    var bool = updatePass(pass);
+		    navigator.geolocation.clearWatch(GpsFence.id);
+   			return bool;
+   		}else if(maxDist > distanceInMetres && maxDist < 10000){
+   			alert('max ! > distanceInMetres && maxDist < 10000')	
+   		}
+   }
+};
+
+function fail (){
+	alert('error getting points');
+}
+
+function updatePass(Geopass){
+	$('#pass').html('<p>Pass:' + Geopass + '</p>');
+	return false;
+}
 
 

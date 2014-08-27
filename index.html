@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html ng-app="application" class="ng-scope"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}.ng-hide-add-active,.ng-hide-remove{display:block!important;}</style>
+<html ng-app="application" class="ng-scope"><head>
+	<style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}.ng-hide-add-active,.ng-hide-remove{display:block!important;}</style>
 			<meta charset="utf-8">
 			<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+			<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 			<script src="https://maps.googleapis.com/maps/api/js?v=3.exp" style=""></script>
+			<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry"></script>
 			<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 			<link href="../css/main.css" rel="stylesheet">
 			<style>
@@ -258,10 +260,14 @@
 					<h4 id = "title" >{{page.userName}}</h4>
 					<h4>{{page.ssid}}</h4>
 					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" id="setGPS" onClick="GpsFence.getGps()">Set GPS</button>
+				</br>
+					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" onClick="GpsFence.checkingThePoints()">Scan Points</button>
 				</form>
 				<div id ="map-canvas"></div>
+				<div class="well col-xs-4 col-lg-4 text-center" style="margin-top:20px;text-align:center;width:40%;margin-right:auto !important; margin-left:auto !important; float:none; padding:10px;">
+					<div id ="pass"></div>
+				</div>
 			</div>
-			
 		</div>
 			
 			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -283,53 +289,7 @@
 
 				$(document).ready(function(){
 					$('.links').hide();
-
-
-					/*$('#setGPS').click(function(){
-					*/	 
-					/*
-						negWorker.onmessage = function (oEvent) {
-						  var array = [];
-						  array.push(oEvent.data);
-						  console.log("DownLeft Worker said : " + array);
-						};
-						obj = {
-							point : "74.12847599999999",
-							distance : "10"
-						};
-
-						negWorker.postMessage(JSON.stringify(obj));
-					});*/
 				});
-				/*
-				$('.register').click(function(){
-					$('#register').show(1250);
-					$('#sign-in').hide(500);
-				});
-				
-				$('#buttonSignin').click(function(){
-					$('#sign-in').show(1250);
-					$('#register').hide(500);
-				});
-				
-				
-				$('#host').click(function(){
-					$('#usertype').html('Host <span class="caret"></span>');
-					$('#hostRequest').show(500);
-				});
-				
-				$('#guest').click(function(){
-					$('#usertype').html('Guest <span class="caret"></span>');
-					if($('#hostRequest')){
-						$('#hostRequest').hide(500);
-					}
-				});
-				/*$('body').mousemove(function( event ) {
-				  var pageCoords = "( " + event.pageX + ", " + event.pageY + " )";
-				  var clientCoords = "( " + event.clientX + ", " + event.clientY + " )";
-				  $('body').css('background', "rgb(" + event.clientY + "," + event.clientX + "," + event.clientY +")");
-				});
-				});*/
 			</script>
 		
 	</body></html>
