@@ -63,6 +63,7 @@ GpsFence.allowedPoints = function(singlePoint){
 	    var longitude = singlePoint.lng;
 	    GpsFence.allowedLat = latitude;
 	    GpsFence.allowedLong = longitude;
+	    
 	    // I have to generate east, west allowed points.
 	    // Then I have to generate the north, south allowed points.
 
@@ -73,8 +74,12 @@ GpsFence.allowedPoints = function(singlePoint){
 	    //--GpsFence.calculateAllowedUpRight(longitude, parseFloat(".00002"), 'longitude');
 	    //--GpsFence.calculateAllowedDownLeft(latitude, parseFloat(".00002"), 'latitude');
 	    //--GpsFence.calculateAllowedDownLeft(longitude, parseFloat(".00002"), 'longitude');
+	    
 	    var callback = GpsFence.doneCalculating;
-
+	    
+	    // should try using 4.572 instead of 0.003048 
+	    // Because 10 ft = 3.048
+	    
 	    for(var iterations = 0; iterations < 360; iterations++){
 	    	if((iterations % 12) == 0){
 	    		var pointsToPush = geoDestination([latitude,longitude], 0.003048, iterations, callback);
