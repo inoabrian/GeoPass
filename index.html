@@ -4,7 +4,7 @@
 			<meta charset="utf-8">
 			<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 			<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-			<script src="https://maps.googleapis.com/maps/api/js?v=3.exp" style=""></script>
+			<!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp" style=""></script>-->
 			<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry"></script>
 			<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 			<link href="../css/main.css" rel="stylesheet">
@@ -259,9 +259,9 @@
 				<form class="form-signin login ng-scope ng-valid ng-valid-required ng-dirty text-center" role="form" >
 					<h4 id = "title" >{{page.userName}}</h4>
 					<h4>{{page.ssid}}</h4>
-					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" id="setGPS" onClick="GpsFence.getGps()">Set GPS</button>
+					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" id="setGPS" ng-show = "page.ahost" onClick="GpsFence.getGps()">Set GPS</button>
 				</br>
-					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" onClick="GpsFence.checkingThePoints()">Scan Points</button>
+					<button type="button" class="btn btn-fresh text-uppercase btn-sm" style="margin: 4px; box-shadow: 1px 1px 5px #888888;" ng-show = "page.guest" onClick="GpsFence.checkingThePoints()">Scan Points</button>
 				</form>
 				<div id ="map-canvas"></div>
 				<div class="well col-xs-4 col-lg-4 text-center" style="margin-top:20px;text-align:center;width:40%;margin-right:auto !important; margin-left:auto !important; float:none; padding:10px;">

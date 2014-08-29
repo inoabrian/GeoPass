@@ -45,8 +45,8 @@
 				this.auth = false;
 				this.userEmail = data.email;
 				this.userName = data.email;
-				console.log(data.email);
-				if(data.hashpass){ 
+				if(data.hashpass){
+					this.ahost = true;
 					this.ssid = data.hashpass;
 				}
 			}else{

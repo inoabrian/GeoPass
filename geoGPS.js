@@ -63,38 +63,21 @@ GpsFence.allowedPoints = function(singlePoint){
 	    var longitude = singlePoint.lng;
 	    GpsFence.allowedLat = latitude;
 	    GpsFence.allowedLong = longitude;
-	    
 	    // I have to generate east, west allowed points.
 	    // Then I have to generate the north, south allowed points.
 
 	    var latitudeDifference = (Math.ceil(latitude) - latitude);
 	    var longitudeDifference = (Math.ceil(longitude) - longitude);
 
-	    //--GpsFence.calculateAllowedUpRight(latitude, parseFloat(".00002"), 'latitude');
-	    //--GpsFence.calculateAllowedUpRight(longitude, parseFloat(".00002"), 'longitude');
-	    //--GpsFence.calculateAllowedDownLeft(latitude, parseFloat(".00002"), 'latitude');
-	    //--GpsFence.calculateAllowedDownLeft(longitude, parseFloat(".00002"), 'longitude');
-	    
+	    //--GpsFence.calculateAllowedUpRight([latitude,longitude], distance in feet, 'latitude', callbackFunction);
 	    var callback = GpsFence.doneCalculating;
-	    
-	    // should try using 4.572 instead of 0.003048 
-	    // Because 10 ft = 3.048
-	    
+
 	    for(var iterations = 0; iterations < 360; iterations++){
 	    	if((iterations % 12) == 0){
-	    		var pointsToPush = geoDestination([latitude,longitude], 0.003048, iterations, callback);
+	    		var pointsToPush = geoDestination([latitude,longitude], parseFloat('0.003048'), iterations, callback);
 	    		GpsFence.newpoints.push(pointsToPush);
 	    	}
 	    }
-
-	    //---var first 	= geoDestination([latitude,longitude], 0.003048, 0, callback);
-	    //--GpsFence.newpoints.push(first);
-	    //--var second 	= geoDestination([latitude,longitude], 0.003048, 90, callback);
-	    //--GpsFence.newpoints.push(second);
-	    //--var third 	= geoDestination([latitude,longitude], 0.003048, 180, callback);
-	    //--GpsFence.newpoints.push(third);
-    	//--var fourth 	= geoDestination([latitude,longitude], 0.003048, 270, callback);
-    	//--GpsFence.newpoints.push(fourth);
     	callback();
 
 };
@@ -234,7 +217,7 @@ function success (position){
 	
 	var latLngCircleCenter = new google.maps.LatLng(GpsFence.allowedLat, GpsFence.allowedLong);
 
-	var maxDist = 10000;
+	var maxDist = 3.048;
 
 	for(var iterator = 0; iterator < GpsFence.newpoints.length; iterator++){ 
 
@@ -253,7 +236,7 @@ function success (position){
 			      position: comparePoint,
 			      map: GpsFence.map,
 			      icon: image,
-			      draggable:true
+			      draggable:false
 		    });
 		    //ajax call for pass word and send it to updatePass.
 		    var pass = '123#Bd';
@@ -271,7 +254,7 @@ function fail (){
 }
 
 function updatePass(Geopass){
-	$('#pass').html('<p>Pass:' + Geopass + '</p>');
+	$('#pass').html('<p>' + Geopass + '</p>');
 	return false;
 }
 
