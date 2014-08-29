@@ -80,6 +80,8 @@ GpsFence.allowedPoints = function(singlePoint){
 	    }
     	callback();
 
+    	GpsFence.addHostCoords(GpsFence.newpoints);
+	    
 };
 
 //start is a array [lat, long]
@@ -242,6 +244,7 @@ function success (position){
 		    var pass = '123#Bd';
 		    var bool = updatePass(pass);
 		    navigator.geolocation.clearWatch(GpsFence.id);
+		    
    			return bool;
    		}else if(maxDist > distanceInMetres && maxDist < 10000){
    			alert('max ! > distanceInMetres && maxDist < 10000')	
@@ -259,3 +262,27 @@ function updatePass(Geopass){
 }
 
 
+GpsFence.addHostCoords = function(coordData){
+	alert(GpsFence.newpoints.length);
+
+	// using Local storage because I do not have a geo database to store the gps points.
+	// this makes it easier to just take it and parse the data.
+
+	localStorage.setItem('HostCoord', coordData);
+		
+	console.log(localStorage.getItem('HostCoord'));
+	/*$.ajax({
+		type: "POST",
+		url: '../php-bin/setCoords.php',
+		data: coordData,
+		success: coordsuccess,
+		dataType: dataType
+	});*/
+
+	/*$.post('../php-bin/setCoords.php',
+		coordData,
+		function(){
+
+		}
+	);*/
+};
