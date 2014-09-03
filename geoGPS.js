@@ -8,16 +8,70 @@ var GpsFence = {
 	allowedLong: null,
 	called : 0,
 	newpoints: [],
-	id: null
+	id: null,
+	watchCount : 0
 };
+var watchId = 0;
  
 GpsFence.getGps = function(){
-	if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.addGps);
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
+	//if (navigator.geolocation) {
+    //    navigator.geolocation.getCurrentPosition(this.addGps);
+    //} else {
+    //    alert("Geolocation is not supported by this browser.");
+    //}
+    var getGpsOptions = {
+	  enableHighAccuracy: false,
+	  timeout: 100,
+	  maximumAge: 0
+    };
+
+   //  if (navigator.geolocation) {
+   //  	navigator.geolocation.watchPosition(getGpsSuccess, getGpsError, getGpsOptions);
+   //  }
+
+ watchId = navigator.geolocation.watchPosition(GpsFence.centerMap, null,getGpsOptions); 
+
 };
+
+GpsFence.centerMap = function(location)
+{
+	//var myLatlng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
+	//map.setCenter(myLatlng);
+	//map.setZoom(17);
+	GpsFence.watchCount++;
+
+//do it 2 times
+	if(location.coords.accuracy <= 10)
+	{
+		alert(location.coords.accuracy);
+		//show current location on map
+		//don’t need to watch anymore
+		alert('Found');
+		navigator.geolocation.clearWatch(watchId);
+		alert('called');
+		GpsFence.addGps(location);
+	}else{
+		alert('try moving around for accuracy: ' + location.coords.accuracy + ', ' + GpsFence.watchCount);
+	}
+}
+// getGpsSuccess = function(position){
+// 	var getGpsOptions = {
+// 	  enableHighAccuracy: true,
+// 	  timeout: Infinity,
+// 	  maximumAge: 0
+//     };
+// 	if(position){
+// 		console.log(position);
+// 	}
+// 	if(position.coords.accuracy < 20)
+// 		console.log(position.coords);
+// 	else
+// 		navigator.geolocation.watchPosition(getGpsSuccess,getGpsError, getGpsOptions);
+// };
+
+// getGpsError = function(error){
+// 	console.log(error);
+// };
 
 GpsFence.isValid = function(){ 
 	var num = 0;
@@ -52,12 +106,15 @@ GpsFence.addGps = function (position){
 	    	GpsFence.map.panTo({lat: position.coords.latitude, lng: position.coords.longitude});
 	    	GpsFence.pNum += 1;
 	    	document.getElementById('setGPS').innerHTML = 'GPS SET'; 
+
+	    	// Call allowed Points awith lat,long
 	    	GpsFence.allowedPoints({lat: position.coords.latitude, lng: position.coords.longitude});
 		}else{
 			console.log('You already set your first point.');
 		}
 }
 
+// Calculate  points that create a 10 ft circle border around
 GpsFence.allowedPoints = function(singlePoint){ 
 	    var latitude = singlePoint.lat;
 	    var longitude = singlePoint.lng;
@@ -178,8 +235,10 @@ GpsFence.calculateAllowedDownLeft = function( point,distance, pointType){
 	negWorker.postMessage(JSON.stringify(obj));
 };
 
+
+// Create and display the circular border around the point.
 GpsFence.doneCalculating = function(){
-	if(GpsFence.called != 4){
+	if(GpsFence.called != 10){
 		GpsFence.called += 1;
 	}else{
 		
@@ -199,7 +258,7 @@ GpsFence.doneCalculating = function(){
 	*/
 };
 
-
+// Retreives point from Guest who is searching for Host  
 GpsFence.checkingThePoints = function (){
 	if ("geolocation" in navigator) {
 		var option = {
@@ -270,7 +329,7 @@ GpsFence.addHostCoords = function(coordData){
 
 	localStorage.setItem('HostCoord', coordData);
 		
-	console.log(localStorage.getItem('HostCoord'));
+	console.log(JSON.parse(localStorage.getItem('HostCoord')));
 	/*$.ajax({
 		type: "POST",
 		url: '../php-bin/setCoords.php',
